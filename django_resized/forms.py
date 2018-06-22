@@ -1,4 +1,3 @@
-import os
 import sys
 from io import BytesIO
 from PIL import Image, ImageFile, ImageOps, ExifTags
@@ -95,8 +94,11 @@ class ResizedImageFieldFile(ImageField.attr_class):
         super(ResizedImageFieldFile, self).save(name, new_content, save)
 
     def get_name(self, name, format):
-        extensions = Image.registered_extensions()
-        extensions = {v: k for k, v in extensions.items()}
+        try:
+            extensions = Image.registered_extensions()
+            extensions = {v: k for k, v in extensions.items()}
+        except:
+            extensions = {}
         extensions.update(DEFAULT_FORMAT_EXTENSIONS)
         if format in extensions:
             name = name.rsplit('.', 1)[0] + extensions[format]
